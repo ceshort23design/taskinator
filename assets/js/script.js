@@ -6,7 +6,7 @@ var pageContentEl = document.querySelector("#page-content");
 var tasksInProgressEl = document.querySelector("#tasks-in-progress");
 var tasksCompletedEl = document.querySelector("#tasks-completed");
 
-// REQUIRE FORM IS FILLED OUT AND CREATE TASK OBJECT
+// CHECK THAT FORM IS FILLED OUT AND CREATE TASK OBJECT
 var taskFormHandler = function(event) {
     event.preventDefault();
 
@@ -43,6 +43,7 @@ var createTaskEl = function(taskDataObject) {
 
     // ADD TASK ID AS A CUSTOM ATTTRIBUTE
     listItemEl.setAttribute("data-task-id", taskIdCounter)
+    listItemEl.setAttribute("draggable", "true");
 
     // CREATE <div> TO HOLD TASK INFO AND ADD TO LIST ITEM
     var taskInfoEl = document.createElement("div");
@@ -168,7 +169,15 @@ var taskStatusChangeHandler = function(event) {
     }
 }
 
+var dragTaskHandler = function(event) {
+    var taskId = event.target.getAttribute("data-task-id");
+    event.dataTransfer.setData("text/plain", taskId);
+    var getId = event.dataTransfer.getData("text/plain");
+    console.log ("getId: ", getId, typeof getId);
+}
+
 // EVENT LISTENERS 
 formEl.addEventListener("submit", taskFormHandler);
 pageContentEl.addEventListener("click", taskButtonHandler);
 pageContentEl.addEventListener("change", taskStatusChangeHandler);
+pageContentEl.addEventListener("dragstart", dragTaskHandler);
